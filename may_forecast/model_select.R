@@ -3,7 +3,8 @@
 # Run hindcasting model selection to find the best model to use in forecasting
 
 # Data
-yukon <- read.csv("data/yukon.csv", stringsAsFactors = FALSE)
+library(readr)
+yukon <- read_csv("data/yukon.csv")
 
 # Candiate models
 models <- c("mdj ~ amatc",
@@ -15,7 +16,7 @@ models <- c("mdj ~ amatc",
             "mdj ~ amatc + msstc + pice")
 
 # Set up selection
-hindcast_years <- 2000:2015
+hindcast_years <- 2002:2016
 round_method <- floor # Floor predictions
 
 result <- data.frame()

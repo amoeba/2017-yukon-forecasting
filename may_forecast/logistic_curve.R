@@ -4,11 +4,12 @@
 #' from may_forecast.R
 
 library(ggplot2)
+library(readr)
 
-predictions <- read.csv("may_forecast/predictions.csv", stringsAsFactors = FALSE)
+predictions <- read_csv("may_forecast/predictions.csv")
 
 # Define the logistic function and its RSS
-mu_i <- 20
+mu_i <- 15
 s_i <- 5
 
 logi_fun <- function(x, mu, s) { 1 / (1 + exp(-((x - mu)/s))) }
@@ -27,13 +28,17 @@ optim_result <- optim(par = c(mu_i, s_i), fn = logi_rss)
 optim_result
 save("optim_result", file = "may_forecast/optim_result.RData")
 
+# 2017 override of optim values because they are unstable when solved with optim
+# I fit them in Excel instead and all is will. They were fit simultaneously (mu and s)
+optim_result <- list(par = c(18.97138802, 5.293539509))
+
 xrange <- -10:50
 cpue <- data.frame(day = xrange,
                    date = as.Date(xrange, format = "%j", origin = as.Date("2016-05-31")),
                    pccpue = 100 * logi_fun(xrange, optim_result$par[1], optim_result$par[2]))
 
 # Write out
-write.csv(cpue, file = "may_forecast/logistic_curve.csv", row.names = FALSE)
+write_csv(cpue, path = "may_forecast/logistic_curve.csv")
 
 predictions$percent <- c(15, 25, 50)
 predictions$label <- paste0(c(15, 25, 50), "%")
@@ -46,4 +51,4 @@ ggplot() +
   labs(x = "Date", y = "Cumulative % CPUE") +
   theme_bw()
 
-ggsave("may_forecast/logisitc_curve.png", width = 6, height = 3)
+ggsave("may_forecast/logistic_curve.png", width = 6, height = 3)
