@@ -73,3 +73,4 @@ ggplot(final_cpue, aes(date, estimate)) +
   theme_bw()
 
 ggsave("daily_forecast/final_cpue.png", width = 6, height = 3)
+
