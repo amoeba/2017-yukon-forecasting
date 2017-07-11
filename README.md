@@ -44,3 +44,4 @@ oscillate around a single value of final CPUE when the forecast is
 reasonable.
 
 ![](daily_forecast/final_cpue.png)
+asdf
